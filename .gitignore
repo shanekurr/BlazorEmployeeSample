@@ -1,0 +1,12 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/BlazorEmployeeSample/FileContentIndex/72e5edb1-91da-48c8-9789-74cd3e8efed7.vsidx
+/.vs/BlazorEmployeeSample/v17/.suo
+/.vs/BlazorEmployeeSample/v17/DocumentLayout.json
+
+/.vs
+
+/BlazorEmployeeSample/obj
+/BlazorEmployeeSample/bin
