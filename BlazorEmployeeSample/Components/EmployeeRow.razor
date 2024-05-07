@@ -1,0 +1,18 @@
+﻿@using BlazorEmployeeSample.Models
+
+<div class="row">
+    <div class="col">
+        @Employee.EmployeeId
+    </div>
+    <div class="col">
+        @Employee.FirstName
+    </div>
+    <div class="col">
+        @Employee.LastName
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Employee Employee { get; set; } = new Employee();
+}

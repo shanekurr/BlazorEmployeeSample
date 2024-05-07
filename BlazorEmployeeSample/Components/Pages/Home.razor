@@ -1,7 +1,33 @@
 ﻿@page "/"
+@using BlazorEmployeeSample.Models
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+@inject IDbContextFactory<EmployeeSampleContext> ContextFactory;
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Employee List</h1>
 
-Welcome to your new app.
+<div class="container">
+@foreach (var employee in employees)
+{
+    <EmployeeRow Employee="employee"/>
+}
+</div>
+
+
+
+@code
+{
+    private ICollection<Employee> employees { get; set; } = new List<Employee>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEmployees();
+    }
+
+    private async Task LoadEmployees()
+    {
+        employees = await (await ContextFactory.CreateDbContextAsync()).Employees.ToListAsync();
+    }
+}

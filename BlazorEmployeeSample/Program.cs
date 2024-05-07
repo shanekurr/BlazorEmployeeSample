@@ -1,10 +1,13 @@
 using BlazorEmployeeSample.Components;
+using BlazorEmployeeSample.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContextFactory<EmployeeSampleContext>();
 
 var app = builder.Build();
 
