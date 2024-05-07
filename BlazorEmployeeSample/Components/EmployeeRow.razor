@@ -1,18 +1,21 @@
 ﻿@using BlazorEmployeeSample.Models
 
-<div class="row">
-    <div class="col">
-        @Employee.EmployeeId
+@if (Employee != null)
+{
+    <div class="row">
+        <div class="col col-1">
+            @Employee.EmployeeId
+        </div>
+        <div class="col col-1">
+            @Employee.FirstName
+        </div>
+        <div class="col col-1">
+            @Employee.LastName
+        </div>
     </div>
-    <div class="col">
-        @Employee.FirstName
-    </div>
-    <div class="col">
-        @Employee.LastName
-    </div>
-</div>
+}
 
 @code {
     [Parameter]
-    public Employee Employee { get; set; } = new Employee();
+    public Employee? Employee { get; set; } = new Employee();
 }

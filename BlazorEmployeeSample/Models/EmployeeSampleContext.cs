@@ -17,7 +17,7 @@ public partial class EmployeeSampleContext : DbContext
 
     public virtual DbSet<Address> Addresses { get; set; }
 
-    public virtual DbSet<Employee> Employees { get; set; }
+    public virtual DbSet<Employee?> Employees { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:Employees");

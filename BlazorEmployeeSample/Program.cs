@@ -1,4 +1,5 @@
 using BlazorEmployeeSample.Components;
+using BlazorEmployeeSample.DataAccess;
 using BlazorEmployeeSample.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddDbContextFactory<EmployeeSampleContext>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 var app = builder.Build();
 

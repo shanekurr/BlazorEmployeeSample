@@ -1,25 +1,39 @@
 ﻿@page "/"
 @using BlazorEmployeeSample.Models
 @using Microsoft.EntityFrameworkCore
+@using BlazorEmployeeSample.DataAccess
 @rendermode InteractiveServer
-@inject IDbContextFactory<EmployeeSampleContext> ContextFactory;
+@inject IEmployeeRepository EmployeeRepository;
 
 <PageTitle>Home</PageTitle>
 
 <h1>Employee List</h1>
 
+
+
 <div class="container">
-@foreach (var employee in employees)
-{
-    <EmployeeRow Employee="employee"/>
-}
+    <div class="row">
+        <div class="col-1">
+            <strong>ID</strong>
+        </div>
+        <div class="col-1">
+            <strong>First Name</strong>
+        </div>
+        <div class="col-1">
+            <strong>Last Name</strong>
+        </div>
+    </div>
+    @foreach (var employee in Employees)
+    {
+        <EmployeeRow Employee="employee"/>
+    }
 </div>
 
 
 
 @code
 {
-    private ICollection<Employee> employees { get; set; } = new List<Employee>();
+    private ICollection<Employee?> Employees { get; set; } = new List<Employee?>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -28,6 +42,6 @@
 
     private async Task LoadEmployees()
     {
-        employees = await (await ContextFactory.CreateDbContextAsync()).Employees.ToListAsync();
+        Employees = (await EmployeeRepository.GetEmployeesAsync()).ToList();
     }
 }
