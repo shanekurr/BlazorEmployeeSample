@@ -8,29 +8,41 @@
 
 <h1>Employee List</h1>
 
-
-<div class="container">
-    <div class="row">
-        <div class="col-1">
-            <strong>ID</strong>
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (Employees.Count == 0)
+{
+    <p>No employees found. Please add employees using Add Employee in menu.</p>
+}
+else
+{
+    <div class="container-sm">
+        <div class="row">
+            <div class="col-1">
+                <strong>ID</strong>
+            </div>
+            <div class="col-3">
+                <strong>Name</strong>
+            </div>
+            <div class="col">
+                <strong>Hire Date</strong>
+            </div>
         </div>
-        <div class="col-4">
-            <strong>Name</strong>
-        </div>
-        <div class="col-1">
-            <strong>Hire Date</strong>
-        </div>
+        @foreach (var employee in Employees)
+        {
+            <EmployeeRow Employee="employee"/>
+        }
     </div>
-    @foreach (var employee in Employees)
-    {
-        <EmployeeRow Employee="employee"/>
-    }
-</div>
+}
+
 
 
 @code
 {
     private ICollection<Employee?> Employees { get; set; } = new List<Employee?>();
+    private bool IsLoading { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,5 +52,6 @@
     private async Task LoadEmployees()
     {
         Employees = (await EmployeeRepository.GetEmployeesAsync()).ToList();
+        IsLoading = false;
     }
 }
