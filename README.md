@@ -18,3 +18,10 @@ Please note that if the database is not created, the project will create the dat
 
 ## Running the project
 To run the project, simply clone the repository and run the project in Visual Studio. The project will open in your default browser and you can start adding, editing and viewing employees.
+
+## Future Improvements
+- Add deep validation to the form fields, does not seem .NET 8 supports the ObjectGraphDataAnnotationsValidator yet.
+- Add unit testing
+- Create shared generic form to be used for Add and Edit operations
+- Add paging, filtering and sorting to the employee list
+- Update Delete operation to use a modal dialog
