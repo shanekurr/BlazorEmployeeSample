@@ -1,11 +1,11 @@
-﻿@page "/employee/delete/{EmployeeId:int}"
+﻿@page "/address/delete/{AddressId:int}"
 @using BlazorEmployeeSample.Models
 @using BlazorEmployeeSample.DataAccess
-@inject IEmployeeRepository EmployeeRepository
+@inject IAddressRepository AddressRepository
 @inject NavigationManager Navigation
 
 <div class="container-sm">
-    <p>Are you sure you want to delete @Employee.FirstName @Employee.LastName?</p>
+    <p>Are you sure you want to delete @Address.Address1?</p>
 </div>
 <div class="container-sm">
     <button class="btn btn-danger" @onclick="Delete">Delete</button>
@@ -19,23 +19,30 @@
 }
 
 @code {
-    [Parameter] public int EmployeeId { get; set; }
-    private Employee? Employee { get; set; } = new();
-    private Employee EmployeeEntity { get; set; } = new();
+    [Parameter] public int AddressId { get; set; }
+    private Address? Address { get; set; } = new();
     private bool IsError { get; set; }
     private string ErrorMessage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Employee = await EmployeeRepository.GetEmployeeAsync(EmployeeId);
-        EmployeeEntity = Employee!;
+        Address = await AddressRepository.GetAddressAsync(AddressId);
+        if (Address == null)
+        {
+            ErrorMessage = "Address not found.";
+            IsError = true;
+        }
+        else
+        {
+            Address = Address!;
+        }
         await base.OnInitializedAsync();
     }
 
     private async Task Delete()
     {
         try{
-            await EmployeeRepository.DeleteEmployeeAsync(EmployeeEntity);
+            await AddressRepository.DeleteAddressAsync(Address);
             Navigation.NavigateTo("/", true);
         }
         catch (Exception ex)
@@ -47,7 +54,7 @@
 
     private void Cancel()
     {
-        Navigation.NavigateTo($"/employee/edit/{EmployeeId}", true);
+        Navigation.NavigateTo($"address/edit/{AddressId}", true);
     }
 
 }

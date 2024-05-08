@@ -1,0 +1,27 @@
+﻿@using BlazorEmployeeSample.Models
+
+@if (Address != null)
+{
+    <div class="row">
+        <div class="col-3">
+            <a href="address/edit/@Address.AddressId">@Address.Address1</a>
+        </div>
+        <div class="col-3">
+            @Address.Address2
+        </div>
+        <div class="col">
+            @Address.AddressCity
+        </div>
+        <div class="col-1">
+            @Address.AddressState
+        </div>
+        <div class="col-1">
+            @Address.AddressZip
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Address? Address { get; set; } = new Address();
+}

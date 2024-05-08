@@ -1,4 +1,4 @@
-﻿@page "/edit/{EmployeeId:int}"
+﻿@page "/employee/edit/{EmployeeId:int}"
 @using BlazorEmployeeSample.Models
 @using BlazorEmployeeSample.DataAccess
 @inject IEmployeeRepository EmployeeRepository
@@ -41,39 +41,42 @@
                         <InputDate id="hireDate" class="form-control" @bind-Value="Employee.HireDate"/>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label for="address1">Address 1</label>
-                        <InputText id="address1" class="form-control" @bind-Value="Employee.Address.Address1"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label for="address2">Address 2</label>
-                        <InputText id="address2" class="form-control" @bind-Value="Employee.Address.Address2"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="city">City</label>
-                        <InputText id="city" class="form-control" @bind-Value="Employee.Address.AddressCity"/>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="state">State</label>
-                        <InputText id="state" class="form-control" @bind-Value="Employee.Address.AddressState"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="zip">Zip Code</label>
-                        <InputText id="zip" class="form-control" @bind-Value="Employee.Address.AddressZip"/>
-                    </div>
-                </div>
             </form>
             <button class="btn btn-primary" type="submit">Save</button>
             <button class="btn btn-danger" @onclick="ConfirmDelete">Delete</button>
             <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
         </EditForm>
+    </div>
+    <div class ="container-md py-2" >
+        @if (Employee.Addresses.Count > 0)
+        {
+            <h3>Addresses</h3>
+            
+                <div class ="container-sm py-3" >
+                     <div class="row">
+                         <div class="col-3">
+                             Address
+                         </div>
+                         <div class="col-3">
+                             Address 2
+                         </div>
+                         <div class="col">
+                             City
+                         </div>
+                         <div class="col-1">
+                             State
+                         </div>
+                         <div class="col-1">
+                             Zip
+                         </div>
+                     </div>
+                    @foreach(var address in Addresses)
+                    {
+                        <AddressRow Address="address"/>
+                    }
+                </div>
+        }
+        <button class="btn btn-secondary" @onclick="AddAddress">Add Address</button>
     </div>
 }
 else
@@ -96,6 +99,8 @@ else
     private Employee? Employee { get; set; } = new();
 
     private Employee EmployeeEntity { get; set; } = new();
+
+    private List<Address> Addresses { get; set; } = new List<Address>();
     
     private bool IsError { get; set; }
     
@@ -104,8 +109,16 @@ else
     protected override async Task OnInitializedAsync()
     {
         Employee = await EmployeeRepository.GetEmployeeAsync(EmployeeId);
-        EmployeeEntity = Employee!;
-
+        if (Employee == null)
+        {
+            ErrorMessage = "Employee not found.";
+            IsError = true;
+        }
+        else
+        {
+            EmployeeEntity = Employee!;
+            Addresses = Employee.Addresses.ToList();    
+        }
         await base.OnInitializedAsync();
     }
 
@@ -123,6 +136,11 @@ else
         }
     }
 
+    private void AddAddress()
+    {
+        Navigation.NavigateTo($"/address/add/{EmployeeId}", true);
+    }
+
     private void Cancel()
     {
         Navigation.NavigateTo("/", true);
@@ -130,7 +148,7 @@ else
 
     private void ConfirmDelete()
     {
-        Navigation.NavigateTo($"/delete/{EmployeeId}", true);
+        Navigation.NavigateTo($"/employee/delete/{EmployeeId}", true);
     }
 
 }

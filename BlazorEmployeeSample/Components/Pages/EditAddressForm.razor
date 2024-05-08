@@ -1,0 +1,109 @@
+﻿@page "/address/edit/{AddressId:int}"
+@using BlazorEmployeeSample.Models
+@using BlazorEmployeeSample.DataAccess
+@inject IAddressRepository AddressRepository
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<h3>Edit Address</h3>
+
+@if (Address != null)
+{
+    <div class="container-sm py-5">
+        <EditForm Model="Address" OnValidSubmit="async () => await Save()">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
+            <form class="row g-3 p-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="address1">Address 1</label>
+                        <InputText id="address1" class="form-control" @bind-Value="Address.Address1"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="address2">Address 2</label>
+                        <InputText id="address2" class="form-control" @bind-Value="Address.Address2"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="city">City</label>
+                        <InputText id="city" class="form-control" @bind-Value="Address.AddressCity"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="state">State</label>
+                        <InputText id="state" class="form-control" @bind-Value="Address.AddressState"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="zip">Zip Code</label>
+                        <InputText id="zip" class="form-control" @bind-Value="Address.AddressZip"/>
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn btn-danger" @onclick="ConfirmDelete">Delete</button>
+            <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+        </EditForm>
+    </div>
+}
+else
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+@if (IsError)
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage
+    </div>
+}
+
+@code {
+
+    [Parameter] public int AddressId { get; set; }
+
+    private Address? Address { get; set; } = new();
+
+    private Address AddressEntity { get; set; } = new();
+    
+    private bool IsError { get; set; }
+    
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Address = await AddressRepository.GetAddressAsync(AddressId);
+        AddressEntity = Address!;
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            await AddressRepository.UpdateAddressAsync(AddressEntity);
+            Navigation.NavigateTo("/", true);
+        }
+        catch (Exception ex)
+        {
+            IsError = true;
+            ErrorMessage = ex.Message;
+        }
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/", true);
+    }
+
+    private void ConfirmDelete()
+    {
+        Navigation.NavigateTo($"address/delete/{AddressId}", true);
+    }
+
+}
