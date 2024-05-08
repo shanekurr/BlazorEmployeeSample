@@ -14,3 +14,7 @@ Add the connection string to user secrets by right clicking on the project and s
 }
 ```
 
+Please note that if the database is not created, the project will create the database when it is first run.
+
+## Running the project
+To run the project, simply clone the repository and run the project in Visual Studio. The project will open in your default browser and you can start adding, editing and viewing employees.
