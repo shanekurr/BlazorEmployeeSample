@@ -82,7 +82,12 @@ else
         <em>Loading...</em>
     </p>
 }
-
+@if (IsError)
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage
+    </div>
+}
 
 @code {
 
@@ -91,6 +96,10 @@ else
     private Employee? Employee { get; set; } = new();
 
     private Employee EmployeeEntity { get; set; } = new();
+    
+    private bool IsError { get; set; }
+    
+    private string ErrorMessage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,8 +111,16 @@ else
 
     private async Task Save()
     {
-        await EmployeeRepository.UpdateEmployeeAsync(EmployeeEntity);
-        Navigation.NavigateTo("/", true);
+        try
+        {
+            await EmployeeRepository.UpdateEmployeeAsync(EmployeeEntity);
+            Navigation.NavigateTo("/", true);
+        }
+        catch (Exception ex)
+        {
+            IsError = true;
+            ErrorMessage = ex.Message;
+        }
     }
 
     private void Cancel()
