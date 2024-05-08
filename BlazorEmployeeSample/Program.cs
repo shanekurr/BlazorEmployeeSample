@@ -1,6 +1,7 @@
 using BlazorEmployeeSample.Components;
 using BlazorEmployeeSample.DataAccess;
 using BlazorEmployeeSample.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +10,17 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddDbContextFactory<EmployeeSampleContext>();
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<IDbContextFactory<EmployeeSampleContext>>().CreateDbContext();
+    context.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
