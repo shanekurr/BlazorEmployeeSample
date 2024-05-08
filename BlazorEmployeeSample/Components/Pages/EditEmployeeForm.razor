@@ -97,9 +97,7 @@ else
     [Parameter] public int EmployeeId { get; set; }
 
     private Employee? Employee { get; set; } = new();
-
-    private Employee EmployeeEntity { get; set; } = new();
-
+    
     private List<Address> Addresses { get; set; } = new List<Address>();
     
     private bool IsError { get; set; }
@@ -116,7 +114,6 @@ else
         }
         else
         {
-            EmployeeEntity = Employee!;
             Addresses = Employee.Addresses.ToList();    
         }
         await base.OnInitializedAsync();
@@ -126,7 +123,7 @@ else
     {
         try
         {
-            await EmployeeRepository.UpdateEmployeeAsync(EmployeeEntity);
+            await EmployeeRepository.UpdateEmployeeAsync(Employee);
             Navigation.NavigateTo("/", true);
         }
         catch (Exception ex)

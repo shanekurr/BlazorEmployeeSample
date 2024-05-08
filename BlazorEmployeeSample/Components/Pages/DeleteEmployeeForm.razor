@@ -21,21 +21,28 @@
 @code {
     [Parameter] public int EmployeeId { get; set; }
     private Employee? Employee { get; set; } = new();
-    private Employee EmployeeEntity { get; set; } = new();
     private bool IsError { get; set; }
     private string ErrorMessage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Employee = await EmployeeRepository.GetEmployeeAsync(EmployeeId);
-        EmployeeEntity = Employee!;
+        if (Employee == null)
+        {
+            ErrorMessage = "Employee not found.";
+            IsError = true;
+        }
+        else
+        {
+            Employee = Employee!;
+        }
         await base.OnInitializedAsync();
     }
 
     private async Task Delete()
     {
         try{
-            await EmployeeRepository.DeleteEmployeeAsync(EmployeeEntity);
+            await EmployeeRepository.DeleteEmployeeAsync(Employee!);
             Navigation.NavigateTo("/", true);
         }
         catch (Exception ex)
