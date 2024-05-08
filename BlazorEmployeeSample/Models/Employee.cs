@@ -19,7 +19,6 @@ public partial class Employee
 
     [Required]
     public DateOnly? HireDate { get; set; }
-    public Address Address => Addresses.SingleOrDefault() ?? new Address();
-
+    public Address Address => Addresses.FirstOrDefault() ?? new Address();
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 }
