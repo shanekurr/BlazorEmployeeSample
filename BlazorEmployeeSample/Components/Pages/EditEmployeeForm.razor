@@ -1,6 +1,6 @@
 ﻿@page "/edit/{EmployeeId:int}"
-@using BlazorEmployeeSample.DataAccess
 @using BlazorEmployeeSample.Models
+@using BlazorEmployeeSample.DataAccess
 @inject IEmployeeRepository EmployeeRepository
 @inject NavigationManager Navigation
 
@@ -8,52 +8,111 @@
 
 @if (Employee != null)
 {
-    <div class="form-group">
-        <label for="employeeId">Employee ID</label>
-        <input type="text" class="form-control" id="employeeId" value="@Employee.EmployeeId" disabled />
-    </div>
-    <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input type="text" class="form-control" id="firstName" value="@EmployeeEntity.FirstName" @oninput="@(e => EmployeeEntity.FirstName = e.Value.ToString())" />
-    </div>
-    <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input type="text" class="form-control" id="lastName" value="@EmployeeEntity.LastName" @oninput="@(e => EmployeeEntity.LastName = e.Value.ToString())" />
-    </div>
-    <div class="form-group">
-        <label for="hireDate">Hire Date</label>
-        <input type="date" class="form-control" id="hireDate" value="@EmployeeEntity.HireDate.GetValueOrDefault().ToString("yyyy-MM-dd")" @oninput="@(e => EmployeeEntity.HireDate = DateOnly.Parse(e.Value.ToString()))" />
-    </div>
-    <div class="form-group" id="address">
-        <label for="address1">Street Address 1</label>
-        <input type="text" class="form-control" id="address1" value="@EmployeeEntity.Address.Address1" @oninput="@(e => EmployeeEntity.Address.Address1 = e.Value.ToString())" />
-        <label for="address2">Street Address 2</label>
-        <input type="text" class="form-control" id="address2" value="@EmployeeEntity.Address.Address2" @oninput="@(e => EmployeeEntity.Address.Address2 = e.Value.ToString())" />
-        <label for="city">City</label>
-        <input type="text" class="form-control" id="city" value="@EmployeeEntity.Address.AddressCity" @oninput="@(e => EmployeeEntity.Address.AddressCity = e.Value.ToString())" />
-        <label for="state">State</label>
-        <input type="text" class="form-control" id="state" value="@EmployeeEntity.Address.AddressState" @oninput="@(e => EmployeeEntity.Address.AddressState = e.Value.ToString())" />
-        <label for="zip">Zip Code</label>
-        <input type="text" class="form-control" id="zip" value="@EmployeeEntity.Address.AddressZip" @oninput="@(e => EmployeeEntity.Address.AddressZip = e.Value.ToString())" />
-    </div>
+    <div class="container-fluid">
+        <EditForm Model="Employee" OnValidSubmit="async () => await Save()">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
+            <div class="row">
+                <div class="col-1">
+                    <label for="employeeId">Employee ID</label>
+                </div>
+                <div class="col-2">
+                    <InputNumber id="employeeId" @bind-Value="Employee.EmployeeId" disabled/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="firstName">First Name</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="firstName" @bind-Value="Employee.FirstName"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="lastName">Last Name</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="lastName" @bind-Value="Employee.LastName"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="jobTitle">Job Title</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="jobTitle" @bind-Value="Employee.JobTitle"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="hireDate">Hire Date</label>
+                </div>
+                <div class="col-2">
+                    <InputDate id="hireDate" @bind-Value="Employee.HireDate"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="address1">Street Address 1</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="address1" @bind-Value="Employee.Address.Address1"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="address2">Street Address 2</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="address2" @bind-Value="Employee.Address.Address2"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="city">City</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="city" @bind-Value="Employee.Address.AddressCity"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="state">State</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="state" @bind-Value="Employee.Address.AddressState"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="zip">Zip Code</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="zip" @bind-Value="Employee.Address.AddressZip"/>
+                </div>
+            </div>
 
-    <button class="btn btn-primary" @onclick="async () => await Save()">Save</button>
-    <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+        </EditForm>
+    </div>
 }
 else
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 
 
 @code {
 
-    [Parameter]
-    public int EmployeeId { get; set; }
+    [Parameter] public int EmployeeId { get; set; }
 
-    private Employee? Employee { get; set; } = new Employee();
+    private Employee? Employee { get; set; } = new();
 
-    private Employee EmployeeEntity { get; set; } = new Employee();
+    private Employee EmployeeEntity { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,11 +125,12 @@ else
     private async Task Save()
     {
         await EmployeeRepository.UpdateEmployeeAsync(EmployeeEntity);
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo("/", true);
     }
 
     private void Cancel()
     {
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo("/", true);
     }
+
 }
