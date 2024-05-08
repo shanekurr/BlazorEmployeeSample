@@ -1,0 +1,53 @@
+﻿@page "/delete/{EmployeeId:int}"
+@using BlazorEmployeeSample.Models
+@using BlazorEmployeeSample.DataAccess
+@inject IEmployeeRepository EmployeeRepository
+@inject NavigationManager Navigation
+
+<div class="container-sm">
+    <p>Are you sure you want to delete @Employee.FirstName @Employee.LastName?</p>
+</div>
+<div class="container-sm">
+    <button class="btn btn-danger" @onclick="Delete">Delete</button>
+    <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+</div>
+@if (IsError)
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage
+    </div>
+}
+
+@code {
+    [Parameter] public int EmployeeId { get; set; }
+    private Employee? Employee { get; set; } = new();
+    private Employee EmployeeEntity { get; set; } = new();
+    private bool IsError { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Employee = await EmployeeRepository.GetEmployeeAsync(EmployeeId);
+        EmployeeEntity = Employee!;
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Delete()
+    {
+        try{
+            await EmployeeRepository.DeleteEmployeeAsync(EmployeeEntity);
+            Navigation.NavigateTo("/", true);
+        }
+        catch (Exception ex)
+        {
+            IsError = true;
+            ErrorMessage = ex.Message;
+        }
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo($"/edit/{EmployeeId}", true);
+    }
+
+}

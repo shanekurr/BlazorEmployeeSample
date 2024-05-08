@@ -8,5 +8,6 @@ namespace BlazorEmployeeSample.DataAccess
         Task<Employee?> GetEmployeeAsync(long id);
         Task<Employee?> AddEmployeeAsync(Employee employee);
         Task<Employee?> UpdateEmployeeAsync(Employee employee);
+        Task<bool> DeleteEmployeeAsync(Employee employee);
     }
 }

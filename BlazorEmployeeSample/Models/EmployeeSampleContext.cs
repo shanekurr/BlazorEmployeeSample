@@ -48,7 +48,8 @@ public partial class EmployeeSampleContext : DbContext
             entity.HasOne(d => d.Employee).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.EmployeeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Address_Employees");
+                .HasConstraintName("FK_Address_Employees")
+                .OnDelete(DeleteBehavior.ClientCascade);
         });
 
         modelBuilder.Entity<Employee>(entity =>

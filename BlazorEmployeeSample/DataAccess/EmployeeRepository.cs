@@ -30,4 +30,11 @@ public class EmployeeRepository(IDbContextFactory<EmployeeSampleContext> context
         await _context.SaveChangesAsync();
         return result.Entity;
     }
+
+    public async Task<bool> DeleteEmployeeAsync(Employee employee)
+    {
+        var result = _context.Employees.Remove(employee);
+        await _context.SaveChangesAsync();
+        return result.State == EntityState.Deleted;
+    }
 }
