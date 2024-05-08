@@ -12,6 +12,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContextFactory<EmployeeSampleContext>();
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
 var app = builder.Build();
 
