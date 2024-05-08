@@ -14,6 +14,7 @@ public partial class Employee
     public string? JobTitle { get; set; }
 
     public DateOnly? HireDate { get; set; }
+    public Address Address => Addresses.FirstOrDefault() ?? new Address();
 
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 }

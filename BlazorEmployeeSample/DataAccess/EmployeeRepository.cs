@@ -14,7 +14,7 @@ public class EmployeeRepository(IDbContextFactory<EmployeeSampleContext> context
 
     public async Task<Employee?> GetEmployeeAsync(long id)
     {
-        return await _context.Employees.FindAsync(id);   
+        return await _context.Employees.Include("Addresses").FirstOrDefaultAsync(t => t.EmployeeId == id);   
     }
 
     public async Task<Employee?> AddEmployeeAsync(Employee employee)

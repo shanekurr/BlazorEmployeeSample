@@ -3,14 +3,14 @@
 @if (Employee != null)
 {
     <div class="row">
-        <div class="col col-1">
+        <div class="col-1">
             @Employee.EmployeeId
         </div>
-        <div class="col col-1">
-            @Employee.FirstName
+        <div class="col-4">
+            <a href="edit/@Employee.EmployeeId">@Employee.LastName, @Employee.FirstName</a>
         </div>
-        <div class="col col-1">
-            @Employee.LastName
+        <div class="col-1">
+            @Employee.HireDate.GetValueOrDefault().ToShortDateString()
         </div>
     </div>
 }
