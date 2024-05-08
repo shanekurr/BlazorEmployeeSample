@@ -1,0 +1,127 @@
+﻿@page "/add"
+@using BlazorEmployeeSample.Models
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using BlazorEmployeeSample.DataAccess
+@inject IEmployeeRepository EmployeeRepository
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Add Employee</PageTitle>
+
+<h1>Add Employee</h1>
+
+@if (Employee != null)
+{
+    <div class="container-fluid">
+        <EditForm Model="Employee" OnValidSubmit="async () => await Save()">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="row">
+                <div class="col-1">
+                    <label for="firstName">First Name</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="firstName" @bind-Value="Employee.FirstName" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="lastName">Last Name</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="lastName" @bind-Value="Employee.LastName" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="jobTitle">Job Title</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="jobTitle" @bind-Value="Employee.JobTitle" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="hireDate">Hire Date</label>
+                </div>
+                <div class="col-2">
+                    <InputDate id="hireDate" @bind-Value="Employee.HireDate" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="address1">Street Address 1</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="address1" @bind-Value="Employee.Address.Address1" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="address2">Street Address 2</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="address2" @bind-Value="Employee.Address.Address2" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="city">City</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="city" @bind-Value="Employee.Address.AddressCity" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="state">State</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="state" @bind-Value="Employee.Address.AddressState" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">
+                    <label for="zip">Zip Code</label>
+                </div>
+                <div class="col-2">
+                    <InputText id="zip" @bind-Value="Employee.Address.AddressZip" />
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+        </EditForm>
+    </div>
+}
+else
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+
+
+@code {
+    
+    private Employee? Employee { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Employee = new Employee();
+        Employee.Addresses.Add(new Address());
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Save()
+    {
+        if (Employee != null) await EmployeeRepository.AddEmployeeAsync(Employee);
+        Navigation.NavigateTo("/", true);
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/", true);
+    }
+
+}

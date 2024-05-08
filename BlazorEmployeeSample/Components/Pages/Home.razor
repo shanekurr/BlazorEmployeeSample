@@ -1,6 +1,5 @@
 ﻿@page "/"
 @using BlazorEmployeeSample.Models
-@using Microsoft.EntityFrameworkCore
 @using BlazorEmployeeSample.DataAccess
 @rendermode InteractiveServer
 @inject IEmployeeRepository EmployeeRepository;
@@ -8,7 +7,6 @@
 <PageTitle>Home</PageTitle>
 
 <h1>Employee List</h1>
-
 
 
 <div class="container">
@@ -28,7 +26,6 @@
         <EmployeeRow Employee="employee"/>
     }
 </div>
-
 
 
 @code
